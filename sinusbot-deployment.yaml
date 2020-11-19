@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: sinusbot
+  name: sinusbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sinusbot
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: sinusbot
+    spec:
+      containers:
+      - image: sinusbot/docker
+        name: sinusbot
+        ports:
+        - containerPort: 8087
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/sinusbot/scripts
+          name: sinusbot-claim0
+        - mountPath: /opt/sinusbot/data
+          name: sinusbot-claim1
+      restartPolicy: Always
+      volumes:
+      - name: sinusbot-1
+        persistentVolumeClaim:
+          claimName: sinusbot-1
+      - name: sinusbot-2
+        persistentVolumeClaim:
+          claimName: sinusbot-2
+status: {}
